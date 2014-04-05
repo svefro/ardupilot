@@ -68,6 +68,9 @@ public:
     // hook for eeprom variables
     static const struct AP_Param::GroupInfo        var_info[];
 
+	//SVEFRO Moved from Private
+	AP_Int8                         _stab_tilt; ///< (1 = yes, 0 = no)
+
 private:
 
     //methods
@@ -107,7 +110,8 @@ private:
 
     // EEPROM parameters
     AP_Int8                         _stab_roll; ///< (1 = yes, 0 = no)
-    AP_Int8                         _stab_tilt; ///< (1 = yes, 0 = no)
+    //SVEFRO Moved to Public
+	//AP_Int8                         _stab_tilt; ///< (1 = yes, 0 = no)
     AP_Int8                         _stab_pan;  ///< (1 = yes, 0 = no)
 
     AP_Int8                         _mount_mode;

@@ -27,6 +27,9 @@ static bool set_mode(uint8_t mode)
             #else
                 success = acro_init(ignore_checks);
             #endif
+			//SVEFRO Disable Camera Tilt Stabilization
+            camera_mount._stab_tilt = 0;
+
             break;
 
         case STABILIZE:
@@ -39,6 +42,10 @@ static bool set_mode(uint8_t mode)
 
         case ALT_HOLD:
             success = althold_init(ignore_checks);
+
+			//SVEFRO Enable Camera Tilt Stabilization
+            camera_mount._stab_tilt = 1;
+
             break;
 
         case AUTO:
