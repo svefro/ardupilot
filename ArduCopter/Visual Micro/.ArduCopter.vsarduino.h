@@ -134,6 +134,7 @@ static void Log_Write_Control_Tuning();
 static void Log_Write_Performance();
 static void Log_Write_Camera();
 static void Log_Write_Error(uint8_t sub_system, uint8_t error_code);
+static void Log_Write_Baro(void);
 static void load_parameters(void);
 void userhook_init();
 void userhook_FastLoop();
@@ -148,7 +149,6 @@ static bool verify_takeoff();
 static bool verify_land();
 static bool verify_loiter_unlimited();
 static bool verify_loiter_time();
-static bool verify_circle();
 static bool verify_RTL();
 static bool verify_wait_delay();
 static bool verify_change_alt();
@@ -177,7 +177,8 @@ static void auto_land_start(const Vector3f& destination);
 static void auto_land_run();
 static void auto_rtl_start();
 void auto_rtl_run();
-static void auto_circle_start(const Vector3f& center);
+static void auto_circle_movetoedge_start();
+static void auto_circle_start();
 void auto_circle_run();
 uint8_t get_default_auto_yaw_mode(bool rtl);
 void set_auto_yaw_mode(uint8_t yaw_mode);
@@ -205,12 +206,22 @@ static void flip_run();
 static bool guided_init(bool ignore_checks);
 static void guided_set_destination(const Vector3f& destination);
 static void guided_run();
+static bool hybrid_init(bool ignore_checks);
+static void hybrid_run();
+static void hybrid_update_pilot_lean_angle(int16_t &lean_angle_filtered, int16_t &lean_angle_raw);
+static int16_t hybrid_mix_controls(float mix_ratio, int16_t first_control, int16_t second_control);
+static void hybrid_update_brake_angle_from_velocity(int16_t &brake_angle, float velocity);
+static void hybrid_update_wind_comp_estimate();
+static void hybrid_get_wind_comp_lean_angles(int16_t &roll_angle, int16_t &pitch_angle);
+static void hybrid_roll_controller_to_pilot_override();
+static void hybrid_pitch_controller_to_pilot_override();
 static bool land_init(bool ignore_checks);
 static void land_run();
 static void land_gps_run();
 static void land_nogps_run();
 static float get_throttle_land();
 static bool update_land_detector();
+static void land_do_not_use_GPS();
 static bool loiter_init(bool ignore_checks);
 static void loiter_run();
 static void read_control_switch();
@@ -231,10 +242,11 @@ static bool rtl_init(bool ignore_checks);
 static void rtl_run();
 static void rtl_climb_start();
 static void rtl_return_start();
-static void rtl_descent_start();
-static void rtl_climb_return_descent_run();
+static void rtl_climb_return_run();
 static void rtl_loiterathome_start();
 static void rtl_loiterathome_run();
+static void rtl_descent_start();
+static void rtl_descent_run();
 static void rtl_land_start();
 static void rtl_land_run();
 static float get_RTL_alt();
@@ -243,6 +255,9 @@ static void sport_run();
 static bool stabilize_init(bool ignore_checks);
 static void stabilize_run();
 void crash_check();
+void parachute_check();
+static void parachute_release();
+static void parachute_manual_release();
 static void failsafe_radio_on_event();
 static void failsafe_radio_off_event();
 static void failsafe_battery_event(void);
@@ -274,6 +289,10 @@ static void heli_stabilize_run();
 static void read_inertia();
 static void read_inertial_altitude();
 static void update_notify();
+static void motor_test_output();
+static bool mavlink_motor_test_check(mavlink_channel_t chan);
+static uint8_t mavlink_motor_test_start(mavlink_channel_t chan, uint8_t motor_seq, uint8_t throttle_type, uint16_t throttle_value, float timeout_sec);
+static void motor_test_stop();
 static void arm_motors_check();
 static void auto_disarm_check();
 static void init_arm_motors();
@@ -287,8 +306,10 @@ static void servo_write(uint8_t ch, uint16_t pwm);
 static void run_nav_updates(void);
 static void calc_position();
 static void calc_distance_and_bearing();
+static void calc_wp_distance();
+static void calc_wp_bearing();
+static void calc_home_distance_and_bearing();
 static void run_autopilot();
-static void reset_nav_params(void);
 void perf_info_reset();
 void perf_info_check_loop_time(uint32_t time_in_micros);
 uint16_t perf_info_get_num_loops();
@@ -366,6 +387,7 @@ static void print_hit_enter();
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\control_drift.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\control_flip.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\control_guided.pde"
+#include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\control_hybrid.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\control_land.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\control_loiter.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\control_modes.pde"
@@ -384,6 +406,7 @@ static void print_hit_enter();
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\heli_control_stabilize.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\inertia.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\leds.pde"
+#include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\motor_test.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\motors.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\navigation.pde"
 #include "U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\ArduCopter\perf_info.pde"

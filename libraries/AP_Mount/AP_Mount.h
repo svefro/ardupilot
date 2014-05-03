@@ -69,12 +69,13 @@ public:
     static const struct AP_Param::GroupInfo        var_info[];
 
 	//SVEFRO Moved from Private
-	AP_Int8                         _stab_tilt; ///< (1 = yes, 0 = no)
+	//AP_Int8                         _stab_tilt; ///< (1 = yes, 0 = no)
+	void                            set_mode(enum MAV_MOUNT_MODE mode);
 
 private:
 
     //methods
-    void                            set_mode(enum MAV_MOUNT_MODE mode);
+    
 
     void                            set_retract_angles(float roll, float tilt, float pan); ///< set mount retracted position
     void                            set_neutral_angles(float roll, float tilt, float pan);
@@ -111,7 +112,7 @@ private:
     // EEPROM parameters
     AP_Int8                         _stab_roll; ///< (1 = yes, 0 = no)
     //SVEFRO Moved to Public
-	//AP_Int8                         _stab_tilt; ///< (1 = yes, 0 = no)
+	AP_Int8                         _stab_tilt; ///< (1 = yes, 0 = no)
     AP_Int8                         _stab_pan;  ///< (1 = yes, 0 = no)
 
     AP_Int8                         _mount_mode;

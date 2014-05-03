@@ -20,6 +20,22 @@ static bool set_mode(uint8_t mode)
         return true;
     }
 
+    //SVEFRO Retract Mount in ACRO Mode
+    switch(mode) {
+        case ACRO:
+            camera_mount._stab_tilt = 0;
+            //camera_mount.set_mode(MAV_MOUNT_MODE_RETRACT);
+            break;
+        
+        default:
+            camera_mount._stab_tilt = 1;
+            camera_mount.set_mode_to_default();
+            break;
+
+    }
+
+
+
     switch(mode) {
         case ACRO:
             #if FRAME_CONFIG == HELI_FRAME
@@ -27,9 +43,7 @@ static bool set_mode(uint8_t mode)
             #else
                 success = acro_init(ignore_checks);
             #endif
-			//SVEFRO Disable Camera Tilt Stabilization
-            camera_mount._stab_tilt = 0;
-
+			
             break;
 
         case STABILIZE:
@@ -42,9 +56,6 @@ static bool set_mode(uint8_t mode)
 
         case ALT_HOLD:
             success = althold_init(ignore_checks);
-
-			//SVEFRO Enable Camera Tilt Stabilization
-            camera_mount._stab_tilt = 1;
 
             break;
 
