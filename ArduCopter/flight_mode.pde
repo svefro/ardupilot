@@ -23,12 +23,12 @@ static bool set_mode(uint8_t mode)
     //SVEFRO Retract Mount in ACRO Mode
     switch(mode) {
         case ACRO:
-            camera_mount._stab_tilt = 0;
-            //camera_mount.set_mode(MAV_MOUNT_MODE_RETRACT);
+            //camera_mount._stab_tilt = 0;
+            camera_mount.set_mode(MAV_MOUNT_MODE_RETRACT);
             break;
         
         default:
-            camera_mount._stab_tilt = 1;
+            //camera_mount._stab_tilt = 1;
             camera_mount.set_mode_to_default();
             break;
 
