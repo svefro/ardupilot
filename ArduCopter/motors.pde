@@ -24,7 +24,7 @@ static void arm_motors_check()
     }
 
     // allow arming/disarming in Loiter and AltHold if landed
-    if (ap.land_complete && (control_mode == LOITER || control_mode == ALT_HOLD)) {
+    if (ap.land_complete && (control_mode == LOITER || control_mode == ALT_HOLD || control_mode == HYBRID)) {
         allow_arming = true;
     }
 
@@ -103,7 +103,7 @@ static void auto_disarm_check()
     }
 
     // allow auto disarm in manual flight modes or Loiter/AltHold if we're landed
-    if(manual_flight_mode(control_mode) || (ap.land_complete && (control_mode == LOITER || control_mode == ALT_HOLD))) {
+    if(manual_flight_mode(control_mode) || (ap.land_complete && (control_mode == LOITER || control_mode == ALT_HOLD || control_mode == HYBRID))) {
         auto_disarming_counter++;
 
         if(auto_disarming_counter >= AUTO_DISARMING_DELAY) {
@@ -317,7 +317,7 @@ static void pre_arm_checks(bool display_failure)
             return;
         }
     }
-
+#if CONFIG_HAL_BOARD != HAL_BOARD_VRBRAIN
 #ifndef CONFIG_ARCH_BOARD_PX4FMU_V1
     // check board voltage
     if ((g.arming_check == ARMING_CHECK_ALL) || (g.arming_check & ARMING_CHECK_VOLTAGE)) {
@@ -328,6 +328,7 @@ static void pre_arm_checks(bool display_failure)
             return;
         }
     }
+#endif
 #endif
 
     // check various parameter values
@@ -555,11 +556,16 @@ static void init_disarm_motors()
 static void
 set_servos_4()
 {
+    // check if we are performing the motor test
+    if (ap.motor_test) {
+        motor_test_output();
+    } else {
 #if FRAME_CONFIG == TRI_FRAME
-    // To-Do: implement improved stability patch for tri so that we do not need to limit throttle input to motors
-    g.rc_3.servo_out = min(g.rc_3.servo_out, 800);
+        // To-Do: implement improved stability patch for tri so that we do not need to limit throttle input to motors
+        g.rc_3.servo_out = min(g.rc_3.servo_out, 800);
 #endif
-    motors.output();
+        motors.output();
+    }
 }
 
 // servo_write - writes to a servo after checking the channel is not used for a motor

@@ -12,7 +12,7 @@ const AP_Param::GroupInfo RC_Channel_aux::var_info[] PROGMEM = {
     // @Param: FUNCTION
     // @DisplayName: Servo out function
     // @Description: Setting this to Disabled(0) will setup this output for control by auto missions or MAVLink servo set commands. any other value will enable the corresponding function
-    // @Values: 0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder,24:Flaperon1,25:Flaperon2,26:GroundSteering
+    // @Values: 0:Disabled,1:RCPassThru,2:Flap,3:Flap_auto,4:Aileron,6:mount_pan,7:mount_tilt,8:mount_roll,9:mount_open,10:camera_trigger,11:release,12:mount2_pan,13:mount2_tilt,14:mount2_roll,15:mount2_open,16:DifferentialSpoiler1,17:DifferentialSpoiler2,18:AileronWithInput,19:Elevator,20:ElevatorWithInput,21:Rudder,24:Flaperon1,25:Flaperon2,26:GroundSteering,27:Parachute
     // @User: Standard
     AP_GROUPINFO("FUNCTION",       1, RC_Channel_aux, function, 0),
 
@@ -257,6 +257,42 @@ RC_Channel_aux::set_servo_out(RC_Channel_aux::Aux_servo_function_t function, int
 			_aux_channels[i]->calc_pwm();
             _aux_channels[i]->output();
 		}
+    }
+}
+
+/*
+  setup failsafe value for an auxiliary function type to a LimitValue
+ */
+void
+RC_Channel_aux::set_servo_failsafe(RC_Channel_aux::Aux_servo_function_t function, RC_Channel::LimitValue limit)
+{
+    if (!function_assigned(function)) {
+        return;
+    }
+    for (uint8_t i = 0; i < RC_AUX_MAX_CHANNELS; i++) {
+        const RC_Channel_aux *ch = _aux_channels[i];
+        if (ch && ch->function.get() == function) {
+            uint16_t pwm = ch->get_limit_pwm(limit);
+            hal.rcout->set_failsafe_pwm(1U<<ch->get_ch_out(), pwm);
+        }
+    }
+}
+
+/*
+  set radio output value for an auxiliary function type to a LimitValue
+ */
+void
+RC_Channel_aux::set_servo_limit(RC_Channel_aux::Aux_servo_function_t function, RC_Channel::LimitValue limit)
+{
+    if (!function_assigned(function)) {
+        return;
+    }
+    for (uint8_t i = 0; i < RC_AUX_MAX_CHANNELS; i++) {
+        RC_Channel_aux *ch = _aux_channels[i];
+        if (ch && ch->function.get() == function) {
+            uint16_t pwm = ch->get_limit_pwm(limit);
+            ch->radio_out = pwm;
+        }
     }
 }
 

@@ -51,6 +51,7 @@ static NOINLINE void send_heartbeat(mavlink_channel_t chan)
         break;
     case STABILIZE:
     case FLY_BY_WIRE_A:
+    case AUTOTUNE:
     case FLY_BY_WIRE_B:
     case CRUISE:
         base_mode = MAV_MODE_FLAG_STABILIZE_ENABLED;
@@ -174,6 +175,7 @@ static NOINLINE void send_extended_status1(mavlink_channel_t chan)
 
     case STABILIZE:
     case FLY_BY_WIRE_A:
+    case AUTOTUNE:
         control_sensors_enabled |= MAV_SYS_STATUS_SENSOR_ANGULAR_RATE_CONTROL; // 3D angular rate control
         control_sensors_enabled |= MAV_SYS_STATUS_SENSOR_ATTITUDE_STABILIZATION; // attitude stabilisation
         break;
@@ -626,13 +628,7 @@ static void NOINLINE send_rangefinder(mavlink_channel_t chan)
 
 static void NOINLINE send_current_waypoint(mavlink_channel_t chan)
 {
-    uint16_t current_cmd_index;
-    if (mission.state() == AP_Mission::MISSION_RUNNING) {
-        current_cmd_index = mission.get_current_nav_cmd().index;
-    }else{
-        current_cmd_index = AP_MISSION_CMD_INDEX_NONE;
-    }
-    mavlink_msg_mission_current_send(chan, current_cmd_index);
+    mavlink_msg_mission_current_send(chan, mission.get_current_nav_index());
 }
 
 static void NOINLINE send_statustext(mavlink_channel_t chan)
@@ -1345,6 +1341,7 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
         case TRAINING:
         case ACRO:
         case FLY_BY_WIRE_A:
+        case AUTOTUNE:
         case FLY_BY_WIRE_B:
         case CRUISE:
         case AUTO:
@@ -1488,13 +1485,13 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
         if (mavlink_check_target(packet.target_system, packet.target_component))
             break;
         
-        if (packet.idx >= g.rally_total || 
+        if (packet.idx >= rally.get_rally_total() || 
             packet.idx >= MAX_RALLYPOINTS) {
             send_text_P(SEVERITY_LOW,PSTR("bad rally point message ID"));
             break;
         }
 
-        if (packet.count != g.rally_total) {
+        if (packet.count != rally.get_rally_total()) {
             send_text_P(SEVERITY_LOW,PSTR("bad rally point message count"));
             break;
         }
@@ -1506,7 +1503,7 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
         rally_point.break_alt = packet.break_alt;
         rally_point.land_dir = packet.land_dir;
         rally_point.flags = packet.flags;
-        set_rally_point_with_index(packet.idx, rally_point);
+        rally.set_rally_point_with_index(packet.idx, rally_point);
         break;
     }
 
@@ -1516,19 +1513,19 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
         mavlink_msg_rally_fetch_point_decode(msg, &packet);
         if (mavlink_check_target(packet.target_system, packet.target_component))
             break;
-        if (packet.idx > g.rally_total) {
+        if (packet.idx > rally.get_rally_total()) {
             send_text_P(SEVERITY_LOW, PSTR("bad rally point index"));   
             break;
         }
         RallyLocation rally_point;
-        if (!get_rally_point_with_index(packet.idx, rally_point)) {
+        if (!rally.get_rally_point_with_index(packet.idx, rally_point)) {
             send_text_P(SEVERITY_LOW, PSTR("failed to set rally point"));   
             break;
         }
 
         mavlink_msg_rally_point_send_buf(msg,
                                          chan, msg->sysid, msg->compid, packet.idx, 
-                                         g.rally_total, rally_point.lat, rally_point.lng, 
+                                         rally.get_rally_total(), rally_point.lat, rally_point.lng, 
                                          rally_point.alt, rally_point.break_alt, rally_point.land_dir, 
                                          rally_point.flags);
         break;
@@ -1562,7 +1559,9 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
         v[6] = packet.chan7_raw;
         v[7] = packet.chan8_raw;
 
-        hal.rcin->set_overrides(v, 8);
+        if (hal.rcin->set_overrides(v, 8)) {
+            failsafe.last_valid_rc_ms = hal.scheduler->millis();
+        }
 
         // a RC override message is consiered to be a 'heartbeat' from
         // the ground station for failsafe purposes

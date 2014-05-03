@@ -30,42 +30,45 @@
  *
  *  Special Thanks to contributors (in alphabetical order by first name):
  *
- *  Adam M Rivera		:Auto Compass Declination
- *  Amilcar Lucas		:Camera mount library
- *  Andrew Tridgell		:General development, Mavlink Support
- *  Angel Fernandez		:Alpha testing
+ *  Adam M Rivera       :Auto Compass Declination
+ *  Amilcar Lucas       :Camera mount library
+ *  Andrew Tridgell     :General development, Mavlink Support
+ *  Angel Fernandez     :Alpha testing
  *  AndreasAntonopoulous:GeoFence
  *  Arthur Benemann     :DroidPlanner GCS
  *  Benjamin Pelletier  :Libraries
  *  Bill King           :Single Copter
- *  Christof Schmid		:Alpha testing
+ *  Christof Schmid     :Alpha testing
  *  Craig Elder         :Release Management, Support
  *  Dani Saez           :V Octo Support
- *  Doug Weibel			:DCM, Libraries, Control law advice
- *  Gregory Fletcher	:Camera mount orientation math
- *  Guntars				:Arming safety suggestion
- *  HappyKillmore		:Mavlink GCS
+ *  Doug Weibel	        :DCM, Libraries, Control law advice
+ *  Emile Castelnuovo   :VRBrain port, bug fixes
+ *  Gregory Fletcher    :Camera mount orientation math
+ *  Guntars             :Arming safety suggestion
+ *  HappyKillmore       :Mavlink GCS
  *  Hein Hollander      :Octo Support, Heli Testing
  *  Igor van Airde      :Control Law optimization
- *  Jack Dunkle			:Alpha testing
- *  James Goppert		:Mavlink Support
- *  Jani Hiriven		:Testing feedback
+ *  Jack Dunkle         :Alpha testing
+ *  James Goppert       :Mavlink Support
+ *  Jani Hiriven        :Testing feedback
  *  Jean-Louis Naudin   :Auto Landing
  *  John Arne Birkeland	:PPM Encoder
- *  Jose Julio			:Stabilization Control laws, MPU6k driver
+ *  Jose Julio          :Stabilization Control laws, MPU6k driver
+ *  Julien Dubois       :Hybrid flight mode
  *  Julian Oes          :Pixhawk
  *  Jonathan Challinger :Inertial Navigation, CompassMot, Spin-When-Armed
  *  Kevin Hester        :Andropilot GCS
- *  Max Levine			:Tri Support, Graphics
- *  Leonard Hall 		:Flight Dynamics, Throttle, Loiter and Navigation Controllers
- *  Marco Robustini		:Lead tester
- *  Michael Oborne		:Mission Planner GCS
- *  Mike Smith			:Pixhawk driver, coding support
+ *  Max Levine          :Tri Support, Graphics
+ *  Leonard Hall        :Flight Dynamics, Throttle, Loiter and Navigation Controllers
+ *  Marco Robustini     :Lead tester
+ *  Michael Oborne      :Mission Planner GCS
+ *  Mike Smith          :Pixhawk driver, coding support
  *  Olivier Adler       :PPM Encoder, piezo buzzer
- *  Pat Hickey          :Hardware Abstraaction Layer (HAL)
- *  Robert Lefebvre		:Heli Support, Copter LEDs
+ *  Pat Hickey          :Hardware Abstraction Layer (HAL)
+ *  Robert Lefebvre     :Heli Support, Copter LEDs
  *  Roberto Navoni      :Library testing, Porting to VRBrain
  *  Sandro Benigno      :Camera support, MinimOSD
+ *  Sandro Tognana      :Hybrid flight mode
  *  ..and many more.
  *
  *  Code commit statistics can be found here: https://github.com/diydrones/ardupilot/graphs/contributors
@@ -92,6 +95,7 @@
 #include <AP_HAL_AVR.h>
 #include <AP_HAL_AVR_SITL.h>
 #include <AP_HAL_PX4.h>
+#include <AP_HAL_VRBRAIN.h>
 #include <AP_HAL_FLYMAPLE.h>
 #include <AP_HAL_Linux.h>
 #include <AP_HAL_Empty.h>
@@ -112,6 +116,7 @@
 #include <AP_AHRS.h>
 #include <AP_NavEKF.h>
 #include <AP_Mission.h>         // Mission command library
+#include <AP_Rally.h>           // Rally point library
 #include <AC_PID.h>             // PID library
 #include <AC_P.h>               // P library
 #include <AC_AttitudeControl.h> // Attitude control library
@@ -145,6 +150,9 @@
 #endif
 #if EPM_ENABLED == ENABLED
 #include <AP_EPM.h>				// EPM cargo gripper stuff
+#endif
+#if PARACHUTE == ENABLED
+#include <AP_Parachute.h>		// Parachute release library
 #endif
 
 // AP_HAL to Arduino compatibility layer
@@ -213,6 +221,8 @@ static DataFlash_File DataFlash("logs");
 static DataFlash_File DataFlash("/fs/microsd/APM/LOGS");
 #elif CONFIG_HAL_BOARD == HAL_BOARD_LINUX
 static DataFlash_File DataFlash("logs");
+#elif CONFIG_HAL_BOARD == HAL_BOARD_VRBRAIN
+static DataFlash_File DataFlash("/fs/microsd/APM/LOGS");
 #else
 static DataFlash_Empty DataFlash;
 #endif
@@ -261,6 +271,8 @@ static AP_InertialSensor_Oilpan ins(&adc);
 static AP_InertialSensor_HIL ins;
 #elif CONFIG_IMU_TYPE == CONFIG_IMU_PX4
 static AP_InertialSensor_PX4 ins;
+#elif CONFIG_IMU_TYPE == CONFIG_IMU_VRBRAIN
+static AP_InertialSensor_VRBRAIN ins;
 #elif CONFIG_IMU_TYPE == CONFIG_IMU_FLYMAPLE
 AP_InertialSensor_Flymaple ins;
 #elif CONFIG_IMU_TYPE == CONFIG_IMU_L3G4200D
@@ -278,6 +290,8 @@ static SITL sitl;
 static AP_Baro_BMP085 barometer;
   #elif CONFIG_BARO == AP_BARO_PX4
 static AP_Baro_PX4 barometer;
+#elif CONFIG_BARO == AP_BARO_VRBRAIN
+static AP_Baro_VRBRAIN barometer;
   #elif CONFIG_BARO == AP_BARO_MS5611
    #if CONFIG_MS5611_SERIAL == AP_BARO_MS5611_SPI
 static AP_Baro_MS5611 barometer(&AP_Baro_MS5611::spi);
@@ -290,6 +304,8 @@ static AP_Baro_MS5611 barometer(&AP_Baro_MS5611::i2c);
 
  #if CONFIG_HAL_BOARD == HAL_BOARD_PX4
 static AP_Compass_PX4 compass;
+ #elif CONFIG_HAL_BOARD == HAL_BOARD_VRBRAIN
+static AP_Compass_VRBRAIN compass;
  #else
 static AP_Compass_HMC5843 compass;
  #endif
@@ -389,8 +405,9 @@ static union {
         uint8_t usb_connected       : 1; // 13      // true if APM is powered from USB connection
         uint8_t rc_receiver_present : 1; // 14  // true if we have an rc receiver present (i.e. if we've ever received an update
         uint8_t compass_mot         : 1; // 15  // true if we are currently performing compassmot calibration
+        uint8_t motor_test          : 1; // 16  // true if we are currently performing the motors test
     };
-    uint16_t value;
+    uint32_t value;
 } ap;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -490,7 +507,6 @@ static int32_t home_bearing;
 static int32_t home_distance;
 // distance between plane and next waypoint in cm.
 static uint32_t wp_distance;
-static float lon_error, lat_error;      // Used to report how many cm we are from the next waypoint or loiter target position
 static uint8_t land_state;              // records state of land (flying to location, descending)
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -537,9 +553,8 @@ static int16_t desired_climb_rate;          // pilot desired climb rate - for lo
 static float acro_level_mix;                // scales back roll, pitch and yaw inversely proportional to input from pilot
 
 ////////////////////////////////////////////////////////////////////////////////
-// Circle Mode / Loiter control
+// Loiter control
 ////////////////////////////////////////////////////////////////////////////////
-static uint8_t circle_desired_rotations;        // how many times to circle as specified by mission command
 static uint16_t loiter_time_max;                // How long we should stay in Loiter Mode for mission scripting (time in seconds)
 static uint32_t loiter_time;                    // How long have we been loitering - The start time in millis
 
@@ -702,6 +717,13 @@ AC_Fence    fence(&inertial_nav);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
+// Rally library
+////////////////////////////////////////////////////////////////////////////////
+#if AC_RALLY == ENABLED
+AP_Rally rally(ahrs, MAX_RALLYPOINTS, RALLY_START_BYTE);
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
 // Crop Sprayer
 ////////////////////////////////////////////////////////////////////////////////
 #if SPRAYER == ENABLED
@@ -713,6 +735,13 @@ static AC_Sprayer sprayer(&inertial_nav);
 ////////////////////////////////////////////////////////////////////////////////
 #if EPM_ENABLED == ENABLED
 static AP_EPM epm;
+#endif
+
+////////////////////////////////////////////////////////////////////////////////
+// Parachute release
+////////////////////////////////////////////////////////////////////////////////
+#if PARACHUTE == ENABLED
+static AP_Parachute parachute(relay);
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1167,21 +1196,28 @@ static void update_optical_flow(void)
 // called at 50hz
 static void update_GPS(void)
 {
-    static uint32_t last_gps_reading;           // time of last gps message
+    static uint32_t last_gps_reading[GPS_MAX_INSTANCES];   // time of last gps message
     static uint8_t ground_start_count = 10;     // counter used to grab at least 10 reads before commiting the Home location
     bool report_gps_glitch;
+    bool gps_updated = false;
 
     gps.update();
 
     // logging and glitch protection run after every gps message
-    if (gps.last_message_time_ms() != last_gps_reading) {
-        last_gps_reading = gps.last_message_time_ms();
+    for (uint8_t i=0; i<gps.num_sensors(); i++) {
+        if (gps.last_message_time_ms(i) != last_gps_reading[i]) {
+            last_gps_reading[i] = gps.last_message_time_ms(i);
 
-        // log GPS message
-        if (g.log_bitmask & MASK_LOG_GPS) {
-            DataFlash.Log_Write_GPS(gps, current_loc.alt);
+            // log GPS message
+            if (g.log_bitmask & MASK_LOG_GPS) {
+                DataFlash.Log_Write_GPS(gps, i, current_loc.alt);
+            }
+
+            gps_updated = true;
         }
+    }
 
+    if (gps_updated) {
         // run glitch protection and update AP_Notify if home has been initialised
         if (ap.home_is_set) {
             gps_glitch.check_position();
@@ -1415,7 +1451,7 @@ static void tuning(){
 
     case CH6_WP_SPEED:
         // set waypoint navigation horizontal speed to 0 ~ 1000 cm/s
-        wp_nav.set_horizontal_velocity(g.rc_6.control_in);
+        wp_nav.set_speed_xy(g.rc_6.control_in);
         break;
 
     // Acro roll pitch gain

@@ -8,12 +8,18 @@
 const AP_Param::GroupInfo AP_Mission::var_info[] PROGMEM = {
 
     // @Param: TOTAL
-    // @DisplayName: Total number of commands in the mission in eeprom
+    // @DisplayName: Total mission commands
     // @Description: The number of mission mission items that has been loaded by the ground station. Do not change this manually.
     // @Range: 0 32766
     // @Increment: 1
     // @User: Advanced
     AP_GROUPINFO("TOTAL",  0, AP_Mission, _cmd_total, 0),
+
+    // @Param: AUTORESET
+    // @DisplayName: Reset mission on AUTO
+    // @Description: When set to 0 the mission will continue a previous AUTO mission when switching to AUTO mode. When set to 1 the mission will restart from the first waypoint each time AUTO mode is started.
+    // @Values: 0:Continue Mission, 1:Reset Mission
+    AP_GROUPINFO("AUTORESET",  1, AP_Mission, _auto_reset, 0),
 
     AP_GROUPEND
 };
@@ -42,13 +48,9 @@ void AP_Mission::init()
 void AP_Mission::start()
 {
     _flags.state = MISSION_RUNNING;
-    _flags.nav_cmd_loaded = false;
-    _flags.do_cmd_loaded = false;
-    _flags.do_cmd_all_done = false;
-    _nav_cmd.index = AP_MISSION_CMD_INDEX_NONE;
-    _do_cmd.index = AP_MISSION_CMD_INDEX_NONE;
-    _prev_nav_cmd_index = AP_MISSION_CMD_INDEX_NONE;
-    init_jump_tracking();
+
+    reset(); // reset mission to the first command, resets jump tracking
+    
     // advance to the first command
     if (!advance_current_nav_cmd()) {
         // on failure set mission complete
@@ -98,6 +100,28 @@ void AP_Mission::resume()
     if (_flags.do_cmd_loaded && _do_cmd.index != AP_MISSION_CMD_INDEX_NONE) {
         _cmd_start_fn(_do_cmd);
     }
+}
+
+/// start_or_resume - if MIS_AUTORESTART=0 this will call resume(), otherwise it will call start()
+void AP_Mission::start_or_resume()
+{
+    if (_auto_reset) {
+        start();
+    } else {
+        resume();
+    }
+}
+
+/// reset - reset mission to the first command
+void AP_Mission::reset()
+{
+    _flags.nav_cmd_loaded  = false;
+    _flags.do_cmd_loaded   = false;
+    _flags.do_cmd_all_done = false;
+    _nav_cmd.index         = AP_MISSION_CMD_INDEX_NONE;
+    _do_cmd.index          = AP_MISSION_CMD_INDEX_NONE;
+    _prev_nav_cmd_index    = AP_MISSION_CMD_INDEX_NONE;
+    init_jump_tracking();
 }
 
 /// clear - clears out mission
@@ -216,18 +240,16 @@ bool AP_Mission::is_nav_cmd(const Mission_Command& cmd)
 bool AP_Mission::get_next_nav_cmd(uint16_t start_index, Mission_Command& cmd)
 {
     uint16_t cmd_index = start_index;
-    Mission_Command temp_cmd;
 
     // search until the end of the mission command list
     while(cmd_index < (unsigned)_cmd_total) {
         // get next command
-        if (!get_next_cmd(cmd_index, temp_cmd, false)) {
+        if (!get_next_cmd(cmd_index, cmd, false)) {
             // no more commands so return failure
             return false;
         }else{
             // if found a "navigation" command then return it
-            if (is_nav_cmd(temp_cmd)) {
-                cmd = temp_cmd;
+            if (is_nav_cmd(cmd)) {
                 return true;
             }else{
                 // move on in list
@@ -238,6 +260,18 @@ bool AP_Mission::get_next_nav_cmd(uint16_t start_index, Mission_Command& cmd)
 
     // if we got this far we did not find a navigation command
     return false;
+}
+
+/// get the ground course of the next navigation leg in centidegrees
+/// from 0 36000. Return default_angle if next navigation
+/// leg cannot be determined
+int32_t AP_Mission::get_next_ground_course_cd(int32_t default_angle)
+{
+    Mission_Command cmd;
+    if (!get_next_nav_cmd(_nav_cmd.index+1, cmd)) {
+        return default_angle;
+    }
+    return get_bearing_cd(_nav_cmd.content.location, cmd.content.location);
 }
 
 // set_current_cmd - jumps to command specified by index
@@ -538,6 +572,10 @@ bool AP_Mission::mavlink_to_mission_cmd(const mavlink_mission_item_t& packet, AP
         cmd.content.cam_trigg_dist.meters = packet.param1;  // distance between camera shots in meters
         break;
 
+    case MAV_CMD_DO_PARACHUTE:                         // MAV ID: 208
+        cmd.p1 = packet.param1;                        // action 0=disable, 1=enable, 2=release.  See PARACHUTE_ACTION enum
+        break;
+
     default:
         // unrecognised command
         return false;
@@ -755,6 +793,10 @@ bool AP_Mission::mission_cmd_to_mavlink(const AP_Mission::Mission_Command& cmd, 
 
     case MAV_CMD_DO_SET_CAM_TRIGG_DIST:                 // MAV ID: 206
         packet.param1 = cmd.content.cam_trigg_dist.meters;  // distance between camera shots in meters
+        break;
+
+    case MAV_CMD_DO_PARACHUTE:                          // MAV ID: 208
+        packet.param1 = cmd.p1;                         // action 0=disable, 1=enable, 2=release.  See PARACHUTE_ACTION enum
         break;
 
     default:

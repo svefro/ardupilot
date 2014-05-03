@@ -53,6 +53,9 @@
 #define AUX_SWITCH_LAND             18      // change to LAND flight mode
 #define AUX_SWITCH_EPM              19      // Operate the EPM cargo gripper low=off, middle=neutral, high=on
 #define AUX_SWITCH_EKF              20      // Enable NavEKF
+#define AUX_SWITCH_PARACHUTE_ENABLE 21      // Parachute enable/disable
+#define AUX_SWITCH_PARACHUTE_RELEASE 22     // Parachute release
+#define AUX_SWITCH_PARACHUTE_3POS   23      // Parachute disable, enable, release with 3 position switch
 
 // values used by the ap.ch7_opt and ap.ch8_opt flags
 #define AUX_SWITCH_LOW              0       // indicates auxiliar switch is in the low position (pwm <1200)
@@ -97,7 +100,8 @@
 #define SPORT 13                        // earth frame rate control
 #define FLIP        14                  // flip the vehicle on the roll axis
 #define AUTOTUNE    15                  // autotune the vehicle's roll and pitch gains
-#define NUM_MODES   16
+#define HYBRID      16                  // hybrid - position hold with manual override
+#define NUM_MODES   17
 
 
 // CH_6 Tuning
@@ -172,6 +176,7 @@ enum AutoMode {
     Auto_WP,
     Auto_Land,
     Auto_RTL,
+    Auto_CircleMoveToEdge,
     Auto_Circle,
     Auto_Spline
 };
@@ -279,6 +284,9 @@ enum FlipState {
 #define DATA_EPM_ON                     46
 #define DATA_EPM_OFF                    47
 #define DATA_EPM_NEUTRAL                48
+#define DATA_PARACHUTE_DISABLED         49
+#define DATA_PARACHUTE_ENABLED          50
+#define DATA_PARACHUTE_RELEASED         51
 
 // Centi-degrees to radians
 #define DEGX100 5729.57795f
@@ -288,9 +296,19 @@ enum FlipState {
 #define FENCE_WP_SIZE sizeof(Vector2l)
 #define FENCE_START_BYTE (HAL_STORAGE_SIZE_AVAILABLE-(MAX_FENCEPOINTS*FENCE_WP_SIZE))
 
-// parameters get the first 1536 bytes of EEPROM, mission commands are stored between these params and the fence points
+// rally points shoehorned between fence points and waypoints
+#define MAX_RALLYPOINTS 6
+#define RALLY_START_BYTE (FENCE_START_BYTE-(MAX_RALLYPOINTS*AC_RALLY_WP_SIZE))
+#define RALLY_LIMIT_KM_DEFAULT 2.0  // we'll set a per-vehicle default for this
+
+// parameters get the first 1536 bytes of EEPROM
+// mission commands are stored between these params and the rally points, or fence points if rally disabled
 #define MISSION_START_BYTE   0x600
-#define MISSION_END_BYTE     (FENCE_START_BYTE-1)
+#if AC_RALLY == ENABLED
+  #define MISSION_END_BYTE   (RALLY_START_BYTE-1)
+#else
+  #define MISSION_END_BYTE   (FENCE_START_BYTE-1)
+#endif
 
 // mark a function as not to be inlined
 #define NOINLINE __attribute__((noinline))
@@ -301,10 +319,12 @@ enum FlipState {
 #define CONFIG_IMU_SITL    3
 #define CONFIG_IMU_PX4     4
 #define CONFIG_IMU_FLYMAPLE 5
+#define CONFIG_IMU_VRBRAIN 6
 
 #define AP_BARO_BMP085    1
 #define AP_BARO_MS5611    2
 #define AP_BARO_PX4       3
+#define AP_BARO_VRBRAIN   4
 
 #define AP_BARO_MS5611_SPI 1
 #define AP_BARO_MS5611_I2C 2
@@ -324,6 +344,7 @@ enum FlipState {
 #define ERROR_SUBSYSTEM_CRASH_CHECK         12
 #define ERROR_SUBSYSTEM_FLIP                13
 #define ERROR_SUBSYSTEM_AUTOTUNE            14
+#define ERROR_SUBSYSTEM_PARACHUTE           15
 // general error codes
 #define ERROR_CODE_ERROR_RESOLVED           0
 #define ERROR_CODE_FAILED_TO_INITIALISE     1
@@ -340,10 +361,13 @@ enum FlipState {
 #define ERROR_CODE_MAIN_INS_DELAY           1
 // subsystem specific error codes -- crash checker
 #define ERROR_CODE_CRASH_CHECK_CRASH        1
+#define ERROR_CODE_CRASH_CHECK_LOSS_OF_CONTROL 2
 // subsystem specific error codes -- flip
 #define ERROR_CODE_FLIP_ABANDONED           2
 // subsystem specific error codes -- autotune
 #define ERROR_CODE_AUTOTUNE_BAD_GAINS       2
+// parachute failed to deploy because of low altitude
+#define ERROR_CODE_PARACHUTE_TOO_LOW        2
 
 // Arming Check Enable/Disable bits
 #define ARMING_CHECK_NONE                   0x00
