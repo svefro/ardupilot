@@ -68,6 +68,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_AVR_SITL\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_PX4</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_PX4\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_VRBRAIN</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_VRBRAIN\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_FLYMAPLE</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_FLYMAPLE\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_Linux</Value>
@@ -100,6 +102,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_NavEKF\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Mission</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Mission\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Rally</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Rally\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_PID</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_PID\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_AttitudeControl</Value>
@@ -152,6 +156,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_Sprayer\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_EPM</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_EPM\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Parachute</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Parachute\utility</Value>
             <Value>U:\Dropbox\PortableApps\PortableApps\ArduPilot-Arduino-1.0.3-windows_Ardupilot\libraries</Value>
             <Value>U:\Dropbox\PortableApps\PortableApps\ArduPilot-Arduino-1.0.3-windows_Ardupilot\hardware\apm\libraries</Value>
             <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
@@ -177,6 +183,8 @@
             <Value>ARDUINO_MAIN</Value>
             <Value>F_CPU=16000000L</Value>
             <Value>__AVR__</Value>
+            <Value>CONFIG_HAL_BOARD=HAL_BOARD_APM2</Value>
+            <Value>EXCLUDECORE</Value>
             <Value>__cplusplus</Value>
           </ListValues>
         </avrgcccpp.compiler.symbols.DefSymbols>
@@ -200,6 +208,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_AVR_SITL\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_PX4</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_PX4\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_VRBRAIN</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_VRBRAIN\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_FLYMAPLE</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_FLYMAPLE\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_Linux</Value>
@@ -232,6 +242,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_NavEKF\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Mission</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Mission\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Rally</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Rally\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_PID</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_PID\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_AttitudeControl</Value>
@@ -284,6 +296,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_Sprayer\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_EPM</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_EPM\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Parachute</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Parachute\utility</Value>
             <Value>U:\Dropbox\PortableApps\PortableApps\ArduPilot-Arduino-1.0.3-windows_Ardupilot\libraries</Value>
             <Value>U:\Dropbox\PortableApps\PortableApps\ArduPilot-Arduino-1.0.3-windows_Ardupilot\hardware\apm\libraries</Value>
             <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
@@ -310,6 +324,8 @@
             <Value>ARDUINO_MAIN</Value>
             <Value>F_CPU=16000000L</Value>
             <Value>__AVR__</Value>
+            <Value>CONFIG_HAL_BOARD=HAL_BOARD_APM2</Value>
+            <Value>EXCLUDECORE</Value>
             <Value>__cplusplus</Value>
           </ListValues>
         </avrgcc.compiler.symbols.DefSymbols>
@@ -345,6 +361,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_AVR_SITL\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_PX4</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_PX4\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_VRBRAIN</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_VRBRAIN\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_FLYMAPLE</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_FLYMAPLE\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_Linux</Value>
@@ -377,6 +395,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_NavEKF\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Mission</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Mission\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Rally</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Rally\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_PID</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_PID\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_AttitudeControl</Value>
@@ -429,6 +449,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_Sprayer\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_EPM</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_EPM\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Parachute</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Parachute\utility</Value>
             <Value>U:\Dropbox\PortableApps\PortableApps\ArduPilot-Arduino-1.0.3-windows_Ardupilot\libraries</Value>
             <Value>U:\Dropbox\PortableApps\PortableApps\ArduPilot-Arduino-1.0.3-windows_Ardupilot\hardware\apm\libraries</Value>
             <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
@@ -454,6 +476,8 @@
             <Value>ARDUINO_MAIN</Value>
             <Value>F_CPU=16000000L</Value>
             <Value>__AVR__</Value>
+            <Value>CONFIG_HAL_BOARD=HAL_BOARD_APM2</Value>
+            <Value>EXCLUDECORE</Value>
             <Value>__cplusplus</Value>
           </ListValues>
         </avrgcccpp.compiler.symbols.DefSymbols>
@@ -477,6 +501,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_AVR_SITL\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_PX4</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_PX4\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_VRBRAIN</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_VRBRAIN\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_FLYMAPLE</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_FLYMAPLE\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_HAL_Linux</Value>
@@ -509,6 +535,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_NavEKF\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Mission</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Mission\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Rally</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Rally\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_PID</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_PID\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_AttitudeControl</Value>
@@ -561,6 +589,8 @@
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AC_Sprayer\utility</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_EPM</Value>
             <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_EPM\utility</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Parachute</Value>
+            <Value>U:\Google Drive\Programming\GitHub\ardupilot-SveFro-Mod\libraries\AP_Parachute\utility</Value>
             <Value>U:\Dropbox\PortableApps\PortableApps\ArduPilot-Arduino-1.0.3-windows_Ardupilot\libraries</Value>
             <Value>U:\Dropbox\PortableApps\PortableApps\ArduPilot-Arduino-1.0.3-windows_Ardupilot\hardware\apm\libraries</Value>
             <Value>C:\Program Files (x86)\Visual Micro\Visual Micro for Arduino\Micro Platforms\default\debuggers</Value>
@@ -587,6 +617,8 @@
             <Value>ARDUINO_MAIN</Value>
             <Value>F_CPU=16000000L</Value>
             <Value>__AVR__</Value>
+            <Value>CONFIG_HAL_BOARD=HAL_BOARD_APM2</Value>
+            <Value>EXCLUDECORE</Value>
             <Value>__cplusplus</Value>
           </ListValues>
         </avrgcc.compiler.symbols.DefSymbols>
@@ -613,6 +645,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="UserVariables.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Visual Micro\.ArduCopter.vsarduino.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="ArduCopter.pde">
@@ -756,9 +791,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="APM_Config_mavlink_hil.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Visual Micro\.ArduCopter.vsarduino.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

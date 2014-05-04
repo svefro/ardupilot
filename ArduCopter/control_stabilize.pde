@@ -54,6 +54,6 @@ static void stabilize_run()
     }
 
     // output pilot's throttle
-	//SVEFRO Removed anngle boost
+	//SVEFRO Removed angle boost
     attitude_control.set_throttle_out(pilot_throttle_scaled, false);
 }
