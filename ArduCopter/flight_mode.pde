@@ -20,9 +20,8 @@ static bool set_mode(uint8_t mode)
         return true;
     }
 
-#if MOUNT == ENABLED && MNT_RETRACT_OPTION == ENABLED && MNT_STABILIZE_OPTION == ENABLED
-
-        //SVEFRO Retract Mount in ACRO Mode
+    //Retract Mount in ACRO Mode (SVEFRO)
+    #if MOUNT == ENABLED //&& MNT_RETRACT_OPTION == ENABLED && MNT_STABILIZE_OPTION == ENABLED
         switch(mode) {
 	        case ACRO:
 	            camera_mount.set_mode(MAV_MOUNT_MODE_RETRACT);
@@ -31,14 +30,9 @@ static bool set_mode(uint8_t mode)
 	        default:
 	            camera_mount.set_mode_to_default();
 	            break;
-
-    }
-
-#endif
+        }
+    #endif
     
-
-
-
     switch(mode) {
         case ACRO:
             #if FRAME_CONFIG == HELI_FRAME
