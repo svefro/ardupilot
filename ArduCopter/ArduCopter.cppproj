@@ -782,6 +782,12 @@
     <Compile Include="test.pde">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="control_hybrid.pde">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="motor_test.pde">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Visual Micro\" />
