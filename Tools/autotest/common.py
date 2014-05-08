@@ -243,14 +243,21 @@ def sim_location(mav):
     m = mav.recv_match(type='SIMSTATE', blocking=True)
     return mavutil.location(m.lat*1.0e-7, m.lng*1.0e-7, 0, math.degrees(m.yaw))
 
-def log_download(mavproxy, mav, filename, timeout=180):
+def log_download(mavproxy, mav, filename, timeout=360):
     '''download latest log'''
     mavproxy.send("log list\n")
     mavproxy.expect("numLogs")
     mav.wait_heartbeat()
     mav.wait_heartbeat()
     mavproxy.send("log download latest %s\n" % filename)
-    mavproxy.expect("Finished downloading", timeout=timeout)
+    t1 = time.time()
+    while time.time() - t1 < timeout:
+        try:
+            mavproxy.expect("Finished downloading", timeout=5)
+        except Exception:
+            mavproxy.send("log status\n")
+            continue
+        break
     mavproxy.send("log erase\n")
     mav.wait_heartbeat()
     mav.wait_heartbeat()
