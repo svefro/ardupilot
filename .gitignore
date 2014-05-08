@@ -48,6 +48,9 @@
 /Tools/autotest/jsbsim/fgout.xml
 /Tools/autotest/jsbsim/rascal_test.xml
 ArduCopter/Debug/
+ArduCopter/Visual Micro/
+ArduCopter/ArduCopter.atsln
+ArduCopter/ArduCopter.atsuo
 ArduCopter/test.ArduCopter/
 ArduCopter/test/*
 ArduPlane/test.ArduPlane/
@@ -71,3 +74,4 @@ serialsent.raw
 status.txt
 tags
 test.ArduCopter/*
+Visual Micro
