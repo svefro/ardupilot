@@ -220,6 +220,15 @@ void Buzzer::update()
         }
         return;
     }
+    
+    // check if savetrim_manual status has changed
+    if (_flags.savetrim_manual != AP_Notify::flags.savetrim_manual) {
+        _flags.savetrim_manual = AP_Notify::flags.savetrim_manual;
+        if (_flags.savetrim_manual) {
+            play_pattern(DOUBLE_BUZZ);
+        }
+        return;
+    }
 
     // check ekf bad
     if (_flags.ekf_bad != AP_Notify::flags.ekf_bad) {

@@ -31,8 +31,6 @@ static bool set_mode(uint8_t mode)
             break;
     }
 #endif
-
-
     
     switch(mode) {
         case ACRO:

@@ -76,6 +76,7 @@ private:
         uint8_t baro_glitching     : 1;    // 1 if baro alt is glitching
         uint8_t arming_failed      : 1;    // 0 = failing checks, 1 = passed
         uint8_t ekf_bad            : 1;    // 1 if ekf position has gone bad
+        uint8_t savetrim_manual     : 1;    // 1 = savetrim_manual
     } _flags;
 
     uint8_t         _counter;           // reduces 50hz update down to 10hz for internal processing
