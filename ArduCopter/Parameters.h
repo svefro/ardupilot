@@ -428,6 +428,7 @@ public:
     AP_Float                acro_balance_roll;
     AP_Float                acro_balance_pitch;
     AP_Int8                 acro_trainer;
+    AP_Int8                 stb_angleboost;
 
     // PI/D controllers
     AC_PID                  pid_rate_roll;
