@@ -115,6 +115,7 @@ public:
         k_param_serial0_baud,
         k_param_serial1_baud,
         k_param_serial2_baud,
+        k_param_stb_angleboost,         // 52
 
         // 65: AP_Limits Library
         k_param_limits = 65,            // deprecated - remove
