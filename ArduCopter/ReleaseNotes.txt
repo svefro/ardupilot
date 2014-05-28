@@ -1,3 +1,11 @@
+SveFro-Mod Extra Changes (Define Frame in code before Compile.):
+-Retracts Camera mount in ACRO Mode
+-Added Savetrim by holding Sticks in disarm for 15 Sec
+-Added RCMAP on channels up to 8
+-Removed Angle boost from stabilize mode
+-AC_FENCE,CAMERA,CONFIG_SONAR is Disabled
+------------------------------------------------------------------
+
 ArduCopter Release Notes:
 ------------------------------------------------------------------
 ArduCopter 3.2-rc2 27-May-2014
