@@ -153,6 +153,14 @@ void Buzzer::update()
     if (AP_Notify::flags.failsafe_battery) {
         play_pattern(SINGLE_BUZZ);
     }
+
+    // locatemodel constantly double buzz
+    if (AP_Notify::flags.locatemodel) {
+        //if (_pattern = NONE) {
+        play_pattern(DOUBLE_BUZZ);
+        //}
+    }
+    
 }
 
 // on - turns the buzzer on or off

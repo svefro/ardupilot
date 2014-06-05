@@ -105,17 +105,14 @@ static void auto_disarm_check()
 
     // ensure throttle is down, motors not armed, pitch and roll rc at max. Note: rc1=roll rc2=pitch
     if (!g.rc_3.control_in > 0 && !motors.armed() && g.rc_1.control_in > 4000 && g.rc_2.control_in > 4000 ) {
-        //Start Counting
         if soundalarm_counter > FIND_MODEL_ALARM_DELAY {
-        
-            //Buzz on every count over FIND_MODEL_ALARM_DELAY (1 hz)
-            //Buzzer::play_pattern(DOUBLE_BUZZ);
-            notify.buzzer.play_pattern(DOUBLE_BUZZ);
+            AP_Notify::flags.locatemodel = true;
         }else{
             soundalarm_counter++;
         }
     }else{
         soundalarm_counter = 0;
+        AP_Notify::flags.locatemodel = false;
     }
     
 #endif
