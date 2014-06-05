@@ -4,6 +4,9 @@
 #define DISARM_DELAY            20  // called at 10hz so 2 seconds
 #define AUTO_TRIM_DELAY         100 // called at 10hz so 10 seconds
 #define AUTO_DISARMING_DELAY    15  // called at 1hz so 15 seconds
+#if LOSTMODELBUZZER == ENABLED
+#define FIND_MODEL_ALARM_DELAY  2  // called at 1hz so 2 seconds
+#endif
 
 // arm_motors_check - checks for pilot input to arm or disarm the copter
 // called at 10hz
@@ -96,7 +99,28 @@ static void auto_disarm_check()
 {
     static uint8_t auto_disarming_counter;
 
-    // exit immediately if we are already disarmed or throttle is not zero
+#if LOSTMODELBUZZER == ENABLED
+    
+    static int16_t soundalarm_counter;
+
+    // ensure throttle is down, motors not armed, pitch and roll rc at max. Note: rc1=roll rc2=pitch
+    if (!g.rc_3.control_in > 0 && !motors.armed() && g.rc_1.control_in > 4000 && g.rc_2.control_in > 4000 ) {
+        //Start Counting
+        if soundalarm_counter > FIND_MODEL_ALARM_DELAY {
+        
+            //Buzz on every count over FIND_MODEL_ALARM_DELAY (1 hz)
+            //Buzzer::play_pattern(DOUBLE_BUZZ);
+            notify.buzzer.play_pattern(DOUBLE_BUZZ);
+        }else{
+            soundalarm_counter++;
+        }
+    }else{
+        soundalarm_counter = 0;
+    }
+    
+#endif
+    
+    // exit if we are already disarmed or throttle is not zero
     if (!motors.armed() || g.rc_3.control_in > 0) {
         auto_disarming_counter = 0;
         return;
