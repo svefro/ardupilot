@@ -157,7 +157,7 @@ void Buzzer::update()
     // locatemodel constantly double buzz
     if (AP_Notify::flags.locatemodel) {
         //if (_pattern = NONE) {
-        play_pattern(DOUBLE_BUZZ);
+            play_pattern(DOUBLE_BUZZ);
         //}
     }
 #endif
