@@ -5,6 +5,8 @@
 // If you used to define your CONFIG_APM_HARDWARE setting here, it is no longer
 // valid! You should switch to using a HAL_BOARD flag in your local config.mk.
 
+// SVEFRO Define Frame
+#define FRAME_CONFIG QUAD_FRAME
 //#define FRAME_CONFIG QUAD_FRAME
 /*  options:
  *  QUAD_FRAME
@@ -25,9 +27,9 @@
 //#define LOGGING_ENABLED       DISABLED            // disable dataflash logging to save 11K of flash space
 //#define MOUNT                 DISABLED            // disable the camera gimbal to save 8K of flash space
 //#define AUTOTUNE_ENABLED      DISABLED            // disable the auto tune functionality to save 7k of flash
-//#define AC_FENCE              DISABLED            // disable fence to save 2k of flash
-//#define CAMERA                DISABLED            // disable camera trigger to save 1k of flash
-//#define CONFIG_SONAR          DISABLED            // disable sonar to save 1k of flash
+#define AC_FENCE              DISABLED            // disable fence to save 2k of flash
+#define CAMERA                DISABLED            // disable camera trigger to save 1k of flash
+#define CONFIG_SONAR          DISABLED            // disable sonar to save 1k of flash
 //#define HYBRID_ENABLED        DISABLED            // disable hybrid flight mode to save 4.5k of flash
 
 // features below are disabled by default on APM (but enabled on Pixhawk)
