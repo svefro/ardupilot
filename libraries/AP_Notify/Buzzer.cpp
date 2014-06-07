@@ -156,9 +156,9 @@ void Buzzer::update()
 #if LOSTMODELBUZZER == ENABLED
     // locatemodel constantly double buzz
     if (AP_Notify::flags.locatemodel) {
-        //if (_pattern = NONE) {
+        if (_pattern = NONE) {
             play_pattern(DOUBLE_BUZZ);
-        //}
+        }
     }
 #endif
 }
