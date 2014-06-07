@@ -68,10 +68,12 @@ public:
     // hook for eeprom variables
     static const struct AP_Param::GroupInfo        var_info[];
 
+    // SVEFRO Moved from Private
+    void                            set_mode(enum MAV_MOUNT_MODE mode);
+    
 private:
 
     //methods
-    void                            set_mode(enum MAV_MOUNT_MODE mode);
 
     void                            set_retract_angles(float roll, float tilt, float pan); ///< set mount retracted position
     void                            set_neutral_angles(float roll, float tilt, float pan);
