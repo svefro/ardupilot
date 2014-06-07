@@ -78,7 +78,7 @@ const AP_Param::Info var_info[] PROGMEM = {
     // @Param: CH_FLIGHTMODE or FLTMODE_CH
     // @DisplayName: Flight Mode Channel/CH5
     // @Description: Flight Mode channel number. This is useful when you have a RC transmitter that can't change the channel order easily. Flight Mode is normally on channel 5, but you can move it to any channel with this parameter.
-    // @Range: 5 8
+    // @Range: 1 8
     // @Increment: 1
     // @User: Advanced
     GSCALAR(ch_flightmode,          "CH_FLIGHTMODE",   5),
@@ -86,7 +86,7 @@ const AP_Param::Info var_info[] PROGMEM = {
     // @Param: CH_TUNE or TUNE_CH
     // @DisplayName: Tune channel/CH6
     // @Description: Tune channel number. This is useful when you have a RC transmitter that can't change the channel order easily. Tune (also known as CH6) is normally on channel 6, but you can move it to any channel with this parameter.
-    // @Range: 5 8
+    // @Range: 1 8
     // @Increment: 1
     // @User: Advanced
     GSCALAR(ch_tune,                "CH_TUNE",   6),
@@ -94,7 +94,7 @@ const AP_Param::Info var_info[] PROGMEM = {
     // @Param: CH_AUX1 or AUX1_CH
     // @DisplayName: AUX1 channel/CH7 
     // @Description: AUX1 channel number. This is useful when you have a RC transmitter that can't change the channel order easily. Aux1 (also known as CH7) is normally on channel 7, but you can move it to any channel with this parameter.
-    // @Range: 5 8
+    // @Range: 1 8
     // @Increment: 1
     // @User: Advanced
     GSCALAR(ch_aux1,           "CH_AUX1",   7),
@@ -102,7 +102,7 @@ const AP_Param::Info var_info[] PROGMEM = {
     // @Param: CH_AUX2 or AUX2_CH
     // @DisplayName: AUX2 channel/CH8
     // @Description: AUX2 channel number. This is useful when you have a RC transmitter that can't change the channel order easily. Aux2 (also known as CH8) is normally on channel 8, but you can move it to any channel with this parameter.
-    // @Range: 5 8
+    // @Range: 1 8
     // @Increment: 1
     // @User: Advanced
     GSCALAR(ch_aux2,           "CH_AUX2",   8),
