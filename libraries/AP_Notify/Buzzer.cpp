@@ -157,6 +157,12 @@ void Buzzer::update()
         }
         return;
     }
+#if LOSTMODELBUZZER == ENABLED
+    // locatemodel constantly double buzz
+    if (AP_Notify::flags.locatemodel) {
+            play_pattern(DOUBLE_BUZZ);
+    }
+#endif
 
     // if battery failsafe constantly single buzz
     if (AP_Notify::flags.failsafe_battery) {
