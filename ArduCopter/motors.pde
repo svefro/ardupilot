@@ -5,7 +5,7 @@
 #define AUTO_TRIM_DELAY         100 // called at 10hz so 10 seconds
 #define AUTO_DISARMING_DELAY    15  // called at 1hz so 15 seconds
 #if LOSTMODELBUZZER == ENABLED
-#define FIND_MODEL_ALARM_DELAY  2  // called at 1hz so 2 seconds
+#define FIND_MODEL_ALARM_DELAY  1  // called at 1hz so 1 seconds
 #endif
 
 // arm_motors_check - checks for pilot input to arm or disarm the copter
@@ -105,7 +105,7 @@ static void auto_disarm_check()
 
     // ensure throttle is down, motors not armed, pitch and roll rc at max. Note: rc1=roll rc2=pitch
     if (!g.rc_3.control_in > 0 && !motors.armed() && g.rc_1.control_in > 4000 && g.rc_2.control_in > 4000 ) {
-        if (soundalarm_counter > FIND_MODEL_ALARM_DELAY) {
+        if (soundalarm_counter >= FIND_MODEL_ALARM_DELAY) {
             if (AP_Notify::flags.locatemodel == false) {
                 AP_Notify::flags.locatemodel = true;
                 gcs_send_text_P(SEVERITY_HIGH,PSTR("Locate Copter Alarm!!"));
