@@ -4,6 +4,7 @@ SveFro-Mod Extra Changes (Define Frame in code before Compile.):
 -Added Added CH_ Parameters for ch 5,6,7, and 8
 -Added STB_ANGLEBOOST Parameter for disabling Angle Boost in Stabilize mode
 -AC_FENCE,CAMERA,CONFIG_SONAR is Disabled
+-Added Lost Copter Buzzer
 ------------------------------------------------------------------
 
 ArduCopter Release Notes:
