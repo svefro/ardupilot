@@ -1,8 +1,8 @@
 SveFro-Mod Extra Changes (Define Frame in code before Compile.):
 -Retracts Camera mount in ACRO Mode
 -Added Savetrim by holding Sticks in disarm for 15 Sec
--Added RCMAP on channels up to 8
--Removed Angle boost from stabilize mode
+-Added Added CH_ Parameters for ch 5,6,7, and 8
+-Added STB_ANGLEBOOST Parameter for disabling Angle Boost in Stabilize mode
 -AC_FENCE,CAMERA,CONFIG_SONAR is Disabled
 ------------------------------------------------------------------
 
