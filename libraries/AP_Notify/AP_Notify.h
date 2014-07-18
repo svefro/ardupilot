@@ -47,6 +47,7 @@ public:
         uint16_t parachute_release  : 1;    // 1 if parachute is being released
         uint16_t ekf_bad            : 1;    // 1 if ekf is reporting problems
         uint16_t savetrim_manual    : 1;    // 1 if savetrim_manual
+        uint16_t locatemodel        : 1;    // 1 if lost model alarm is to be enabled (sound buzzer and TODO Flash LED's)
 
         // additional flags
         uint16_t external_leds      : 1;    // 1 if external LEDs are enabled (normally only used for copter)
