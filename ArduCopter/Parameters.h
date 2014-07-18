@@ -120,6 +120,10 @@ public:
         k_param_ekfcheck_compass_thresh,// 54
         k_param_terrain,
         k_param_stb_angleboost = 56,         // 56
+        k_param_ch_flightmode = 57,         //57
+        k_param_ch_tune,                    //58
+        k_param_ch_aux1,                    //59
+        k_param_ch_aux2,                    //60
 
         // 65: AP_Limits Library
         k_param_limits = 65,            // deprecated - remove
@@ -385,7 +389,12 @@ public:
     AP_Int8         ch7_option;
     AP_Int8         ch8_option;
     AP_Int8         arming_check;
-    
+
+    AP_Int8         ch_flightmode;
+    AP_Int8         ch_tune;
+    AP_Int8         ch_aux1;
+    AP_Int8         ch_aux2;
+
     AP_Int8         stb_angleboost;
 
     AP_Int8         land_repositioning;
