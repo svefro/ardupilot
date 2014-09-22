@@ -50,5 +50,5 @@ static void stabilize_run()
     // body-frame rate controller is run directly from 100hz loop
 
     // output pilot's throttle
-    attitude_control.set_throttle_out(pilot_throttle_scaled, true);
+    attitude_control.set_throttle_out(pilot_throttle_scaled, false);
 }
