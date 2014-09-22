@@ -124,6 +124,10 @@ public:
         k_param_optflow,
         k_param_dcmcheck_thresh,        // 59
         k_param_log_bitmask,
+        k_param_fltmode_ch,             // 61
+        k_param_tune_ch,
+        k_param_aux1_ch,
+        k_param_aux2_ch,                // 64
 
         // 65: AP_Limits Library
         k_param_limits = 65,            // deprecated - remove
@@ -434,6 +438,14 @@ public:
 
     AP_Int16                rc_speed; // speed of fast RC Channels in Hz
 
+    //ChannelMapping
+    
+    AP_Int8         fltmode_ch;
+    AP_Int8         tune_ch;
+    AP_Int8         aux1_ch;
+    AP_Int8         aux2_ch;
+    
+    
     // Acro parameters
     AP_Float                acro_rp_p;
     AP_Float                acro_yaw_p;
